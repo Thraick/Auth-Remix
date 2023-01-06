@@ -1,20 +1,57 @@
-import { Link } from "@remix-run/react";
+import { AppBar, Button, Stack } from "@mui/material";
+import type { LoaderArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { getUserData, supabaseStrategy } from "~/auth.server";
+import Container from "~/components/Container"
+import TopBar from "~/components/TopBar";
+
+
+// export const loader = async ({ request }: LoaderArgs) => {
+//   const session = await supabaseStrategy.checkSession(request, 
+//     {failureRedirect: "/",}
+//   );
+
+//   return await getUserData(session.user?.id)
+// };
 
 export default function Index() {
+  // const { data } = useLoaderData<typeof loader>();
+
   return (
     <>
-      <h1>Index page</h1>
-      <ul>
-        <li>
-          <Link to="/private">Go to private page</Link>
-        </li>
-        <li>
-          <Link to="/auth/login">Go to login page</Link>
-        </li>
-        <li>
-          <Link to="/auth/register">Go to register page</Link>
-        </li>
-      </ul>
+      <AppBar
+        position={'sticky'}
+        sx={{
+          top: 0,
+          boxShadow: 1
+        }}
+        color='default'
+
+      >
+        <Container paddingY={1} >
+          <TopBar data={null}/>
+        </Container>
+      </AppBar>
+
+
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+        marginTop={5}
+      >
+        <Button variant="outlined" color="primary">primary</Button>
+        <Button variant="outlined" color="secondary">secondary</Button>
+        <Button variant="outlined" color="success">success</Button>
+        <Button variant="outlined" color="error">error</Button>
+        <Button variant="outlined" color="inherit">inherit</Button>
+        <Button variant="outlined" color="info">info</Button>
+        <Button variant="outlined" color="warning">warning</Button>
+      </Stack>
+
     </>
+
+
   );
 }

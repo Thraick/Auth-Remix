@@ -35,12 +35,12 @@ export default function Screen() {
       {error && <div>{error.message}</div>}
       <div>
         <label htmlFor="email">Email</label>
-        <input type="email" name="email" id="email" />
+        <input type="text" name="email" id="email" />
       </div>
 
       <div>
         <label htmlFor="password">Password</label>
-        <input type="password" name="password" id="password" />
+        <input type="text" name="password" id="password" />
       </div>
 
       <button>Log In</button>

@@ -57,3 +57,12 @@ export const authenticator = new Authenticator<Session>(sessionStorage, {
 
 authenticator.use(supabaseStrategy);
 
+
+export const getUserData = async (userId:any) => {
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select()
+    .eq("id", userId)
+    .single();
+  return { data, error };
+};
