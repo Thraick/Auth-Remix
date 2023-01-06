@@ -1,21 +1,9 @@
 import { AppBar, Button, Stack } from "@mui/material";
-import type { LoaderArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { getUserData, supabaseStrategy } from "~/auth.server";
 import Container from "~/components/Container"
 import TopBar from "~/components/TopBar";
 
 
-// export const loader = async ({ request }: LoaderArgs) => {
-//   const session = await supabaseStrategy.checkSession(request, 
-//     {failureRedirect: "/",}
-//   );
-
-//   return await getUserData(session.user?.id)
-// };
-
 export default function Index() {
-  // const { data } = useLoaderData<typeof loader>();
 
   return (
     <>

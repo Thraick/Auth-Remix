@@ -1,25 +1,13 @@
 import { Grid, IconButton, Stack, Button, Menu, MenuItem } from "@mui/material";
-import { Link as RouterLink, NavLink, useLoaderData, useSubmit } from "@remix-run/react";
+import { Link as RouterLink, NavLink, useSubmit } from "@remix-run/react";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-import type { LoaderArgs } from "@remix-run/node";
-import { getUserData, supabaseStrategy } from "~/auth.server";
 import React from "react";
-
-
-// export const loader = async ({ request }: LoaderArgs) => {
-//     const session = await supabaseStrategy.checkSession(request, {
-//         failureRedirect: "/auth/login",
-//     });
-//     return await getUserData(session.user?.id)
-// };
-
 
 export default function TopBar(props:any) {
 
-    // const { data } = useLoaderData<typeof loader>();
     const submit = useSubmit();
 
     // Profile
