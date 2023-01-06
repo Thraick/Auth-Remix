@@ -6,7 +6,7 @@ export default function Index() {
       <h1>Index page</h1>
       <ul>
         <li>
-          <Link to="/auth/private">Go to private page</Link>
+          <Link to="/private">Go to private page</Link>
         </li>
         <li>
           <Link to="/auth/login">Go to login page</Link>
