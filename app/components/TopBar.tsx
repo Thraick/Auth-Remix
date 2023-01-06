@@ -1,12 +1,23 @@
 import { Grid, IconButton, Stack, Button, Menu, MenuItem } from "@mui/material";
-import { Link as RouterLink, NavLink, useSubmit } from "@remix-run/react";
+import { Link as RouterLink, NavLink, useLoaderData, useSubmit } from "@remix-run/react";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import React from "react";
+import type { LoaderArgs } from "@remix-run/node";
+import { getUserData, supabaseStrategy } from "~/utils/supabase/auth.server";
 
-export default function TopBar(props:any) {
+
+export const loader = async ({ request }: LoaderArgs) => {
+    const session = await supabaseStrategy.checkSession(request, {
+      failureRedirect: "/",
+    });
+  
+    return await getUserData(session.user?.id)
+  };
+
+export default function TopBar(props: any) {
 
     const submit = useSubmit();
 
@@ -32,6 +43,7 @@ export default function TopBar(props:any) {
             justifyContent="space-between"
             alignItems="center"
         >
+            {/* {data ? <div>hello</div>: <div>no</div>} */}
             <Stack
                 direction="row"
                 justifyContent="space-between"
@@ -54,6 +66,7 @@ export default function TopBar(props:any) {
                 <Button variant="text" color="primary" component={RouterLink} to="/private/states">states</Button>
                 <Button variant="text" color="primary" component={RouterLink} to="/private/entity">entity</Button>
             </Stack>
+
 
 
             {props.data ?

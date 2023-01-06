@@ -1,5 +1,5 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
-import { authenticator, getUserData, supabaseStrategy } from "~/auth.server";
+import { authenticator, getUserData, supabaseStrategy } from "~/utils/supabase/auth.server";
 
 
 import { AppBar } from "@mui/material";

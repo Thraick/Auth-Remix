@@ -2,8 +2,8 @@ import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
-import { authenticator, supabaseStrategy, sessionStorage } from "~/auth.server";
-import { supabaseClient } from "~/supabase";
+import { authenticator, supabaseStrategy, sessionStorage } from "~/utils/supabase/auth.server";
+import { supabaseClient } from "~/utils/supabase/supabase";
 
 export const createUser = async (data: any) => {
   const { user, error } =
