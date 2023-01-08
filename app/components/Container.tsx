@@ -1,5 +1,7 @@
-import React from 'react';
-import Box from '@mui/material/Box';
+
+import * as React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
 
 interface Props {
   children: React.ReactNode;
@@ -8,17 +10,16 @@ interface Props {
   [x: string]: any;
 }
 
-const Container = ({ children, ...rest }: Props): JSX.Element => (
-  <Box
-    maxWidth={{ sm: 720, md: 1236 }}
-    width={1}
-    margin={'0 auto'}
-    paddingX={2}
-    paddingY={{ xs: 4, sm: 6, md: 8 }}
-    {...rest}
-  >
-    {children}
-  </Box>
-);
+export default function FixedContainer({ children, ...rest }: Props) {
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <Container
+        fixed
+        {...rest}>
+        {children}
+      </Container>
+    </React.Fragment >
+  );
+}
 
-export default Container;

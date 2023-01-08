@@ -4,7 +4,7 @@ import { authenticator, getUserData, supabaseStrategy } from "~/utils/supabase/a
 
 import { AppBar } from "@mui/material";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import Container from "~/components/Container";
+import FixedContainer from "~/components/Container";
 import TopBar from "~/components/TopBar";
 
 
@@ -36,13 +36,13 @@ export default function Screen() {
         }}
         color='default'
       >
-        <Container paddingY={1} >
+        <FixedContainer>
           <TopBar data={data} />
-        </Container>
+        </FixedContainer>
       </AppBar>
-      <Container>
+      <FixedContainer sx={{ marginY: 4 }}>
         <Outlet />
-      </Container>
+      </FixedContainer>
     </>
   );
 }

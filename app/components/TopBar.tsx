@@ -1,5 +1,5 @@
 import { Grid, IconButton, Stack, Button, Menu, MenuItem } from "@mui/material";
-import { Link as RouterLink, NavLink, useLoaderData, useSubmit } from "@remix-run/react";
+import { Link as RouterLink, NavLink, useSubmit } from "@remix-run/react";
 
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -42,12 +42,13 @@ export default function TopBar(props: any) {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
+            sx={{py: 1}}
         >
             {/* {data ? <div>hello</div>: <div>no</div>} */}
             <Stack
                 direction="row"
                 justifyContent="space-between"
-                alignItems="center"
+                alignItems="flex-start"
                 spacing={1}
             >
                 <IconButton color="primary" aria-label="delete" component={RouterLink} to="/">
@@ -74,7 +75,7 @@ export default function TopBar(props: any) {
                 <Stack
                     direction="row"
                     justifyContent="space-between"
-                    alignItems="center"
+                    alignItems="flex-end"
                     spacing={1}
                 >
 
@@ -106,7 +107,7 @@ export default function TopBar(props: any) {
                 <Stack
                     direction="row"
                     justifyContent="space-between"
-                    alignItems="center"
+                    alignItems="flex-end"
                     spacing={1}
                 >
                     <Button variant="text" color="primary" component={RouterLink} to="/auth/Login">login</Button>
