@@ -6,7 +6,7 @@ import { authenticator, sessionStorage, supabaseStrategy } from "~/utils/supabas
 
 export const action = async ({ request }: ActionArgs) => {
   await authenticator.authenticate("sb", request, {
-    successRedirect: "/private",
+    successRedirect: "/",
     failureRedirect: "/auth/login",
   });
 
@@ -15,7 +15,7 @@ export const action = async ({ request }: ActionArgs) => {
 type LoaderError = { message: string } | null;
 export const loader = async ({ request }: LoaderArgs) => {
   await supabaseStrategy.checkSession(request, {
-    successRedirect: "/private",
+    successRedirect: "/",
   });
 
   const session = await sessionStorage.getSession(

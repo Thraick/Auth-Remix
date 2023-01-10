@@ -5,6 +5,14 @@ export const FaqSchema = Yup.object().shape({
     answer: Yup.string().required()
 });
 
+export const IntentSchema = Yup.object().shape({
+    name_of_intent: Yup.string().required(),
+});
+
+export const StateSchema = Yup.object().shape({
+    intent: Yup.string().required(),
+});
+
 export const getValidationErrors = (err: any) => {
     const validateError = {} as any;
     err.inner.forEach((error:any)=>{

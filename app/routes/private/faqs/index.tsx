@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async () => {
 export default function Index() {
   const { data } = useLoaderData<LoaderType>();
   const submit = useSubmit();
-  
+
   const [open, setOpen] = useState(false);
   const [deleteID, setDeleteID] = useState();
   const [deleteValue, setDeleteValue] = useState();
@@ -66,7 +66,7 @@ export default function Index() {
       </Grid>
 
       <Grid item justifyContent='right' >
-        <Button variant="text" color="primary" component={NavLink} to="/private/faqs/new">New Faq</Button>
+        <Button variant="contained" color="primary" component={NavLink} to="/private/faqs/new">New Faq</Button>
       </Grid>
       <Grid item xs={12} marginTop={3}>
 
@@ -124,6 +124,8 @@ export default function Index() {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        fullWidth
+        maxWidth={'sm'}
       >
         <DialogTitle id="alert-dialog-title">
           Would you like to delete?
@@ -134,10 +136,12 @@ export default function Index() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete} autoFocus>
-            Confirm
-          </Button>
+          <DialogActions sx={{ mb: 2, mx: 2 }}>
+            <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+            <Button variant="contained" onClick={handleDelete} autoFocus>
+              Confirm
+            </Button>
+          </DialogActions>
         </DialogActions>
       </Dialog>
 
