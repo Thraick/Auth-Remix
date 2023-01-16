@@ -10,6 +10,7 @@ import { FaqSchema, getValidationErrors } from "~/utils/jac/yup";
 
 export const action: ActionFunction = async ({request}) => {
     let formData = Object.fromEntries(await request.formData());
+    // let form = await request.formData()
     try {
         await FaqSchema.validate(formData, { abortEarly: false })
         await HttpRequest("update_faq", formData)
@@ -21,12 +22,11 @@ export const action: ActionFunction = async ({request}) => {
 };
 
 export const loader: LoaderFunction = async ({params}) => {
-    let id = { id: params.FaqID }
+    let id = { jid: params.FaqID }
 
     try {
         const response = await HttpRequest("get_faq", id)
-        const payload = response.report[0]
-        return json({ data: payload });
+        return json({ data: response.payload });
     } catch (error) {
         console.log(error)
         return json(error);
@@ -115,7 +115,7 @@ export default function FaqID() {
                         </Grid>
 
                         <input
-                            name='id'
+                            name='jid'
                             value={data[0].jid}
                             type="hidden"
                         />
@@ -146,3 +146,13 @@ export default function FaqID() {
 type LoaderType = {
     data: FaqType[]
 }
+
+// async function httpPost(name: string, form: any) {
+//     // let form = request.formData()
+//     console.log(name + ' action httpPost')
+//     let val = form.get(name)
+//     let report = await HttpRequest(name, val)
+//     console.log("report")
+//     console.log(report)
+//     return report
+// }

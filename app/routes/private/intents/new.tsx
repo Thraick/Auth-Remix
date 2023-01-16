@@ -13,8 +13,11 @@ export const action: ActionFunction = async ({request}) => {
     try {
         await IntentSchema.validate(formData, { abortEarly: false })
         let report = await HttpRequest("create_intent", formData)
-        return redirect('/private/intents/' + report.report[0].jid);
+        console.log(report);
+        // return null
+        return redirect('/private/intents/' + report.payload[0].jid);
     } catch (err) {
+        console.log(err)
         const error = getValidationErrors(err)
         return { error };
     }
@@ -66,10 +69,10 @@ export default function IntentID() {
                                 <TextField
                                     label="Intent *"
                                     variant="outlined"
-                                    name={'name_of_intent'}
+                                    name={'intent'}
                                     fullWidth
                                 />
-                                {actionData?.error['name_of_intent'] && <FormHelperText id="component-error-text">{actionData?.error['name_of_intent']}</FormHelperText>}
+                                {actionData?.error['intent'] && <FormHelperText id="component-error-text">{actionData?.error['intent']}</FormHelperText>}
                             </Stack>
                         </Grid>
 

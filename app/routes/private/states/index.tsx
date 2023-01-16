@@ -15,8 +15,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 export const loader: LoaderFunction = async () => {
   try {
-    const response = await HttpRequest("list_state", {})
-    return json({ data: response.report[0] });
+    const response = await HttpRequest("list_all_intent", {})
+    return json({ data: response.payload });
   } catch (error) {
     console.log(error)
     return json(error);
@@ -34,7 +34,7 @@ export default function Index() {
 
   const handleClickOpen = (props: any) => {
     setDeleteID(props.jid)
-    setDeleteValue(props.question)
+    setDeleteValue(props.intent)
     setOpen(true);
   };
 
@@ -43,9 +43,9 @@ export default function Index() {
   };
 
   const handleDelete = async () => {
-    let id = { id: deleteID }
+    let id = { jid: deleteID }
 
-    await HttpRequest("delete_state", id)
+    await HttpRequest("delete_intent", id)
     submit(null, { action: "/private/states", method: 'get' })
 
     setOpen(false);
@@ -124,6 +124,8 @@ export default function Index() {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        fullWidth
+        maxWidth={'sm'}
       >
         <DialogTitle id="alert-dialog-title">
           Would you like to delete?
@@ -133,9 +135,9 @@ export default function Index() {
             {deleteValue}
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete} autoFocus>
+        <DialogActions sx={{ mb: 2, mx: 2 }}>
+          <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+          <Button variant="contained" onClick={handleDelete} autoFocus>
             Confirm
           </Button>
         </DialogActions>

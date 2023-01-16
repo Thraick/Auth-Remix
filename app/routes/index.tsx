@@ -3,6 +3,7 @@ import type { LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import FixedContainer from "~/components/Container";
 import TopBar from "~/components/TopBar";
+import { HttpRequest } from "~/utils/jac/httpRequest";
 import { getUserData, supabaseStrategy } from "~/utils/supabase/auth.server";
 
 
@@ -18,6 +19,27 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function Index() {
   const { data } = useLoaderData<typeof loader>();
+  // const submit = useSubmit();
+
+  const handleLoadIntent = async () =>{
+    const report = await HttpRequest("load_intent", {})
+    console.log(report)
+  }
+  const handleLoadState = async () =>{
+    const report = await HttpRequest("load_state", {})
+    console.log(report)
+
+  }
+  const handleLoadTfm = async () =>{
+    const report = await HttpRequest("load_tfm", {})
+    console.log(report)
+
+  }
+  const handleLoadFaq = async () =>{
+    const report = await HttpRequest("load_faq", {})
+    console.log(report)
+
+  }
 
   return (
     <>
@@ -36,6 +58,20 @@ export default function Index() {
       </AppBar>
 
       <FixedContainer sx={{ marginY: 4 }}>
+
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+          marginTop={5}
+          marginBottom={10}
+        >
+          <Button variant="outlined" color="primary" onClick={()=>handleLoadIntent()}>Load Intent</Button>
+          <Button variant="outlined" color="primary" onClick={()=>handleLoadState()}>Load State</Button>
+          <Button variant="outlined" color="primary" onClick={()=>handleLoadTfm()}>Load TFM</Button>
+          <Button variant="outlined" color="primary" onClick={()=>handleLoadFaq()}>Load FAQ</Button>
+        </Stack>
         <Stack
           direction="row"
           justifyContent="center"

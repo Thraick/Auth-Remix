@@ -1,144 +1,153 @@
-import TextField from '@mui/material/TextField'
-import { useState } from 'react';
-import Button from '@mui/material/Button';
+import { Button, Grid, IconButton, List, Stack, Typography } from "@mui/material"
+import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Link as NavLink, useLoaderData, useSubmit } from "@remix-run/react";
+import { HttpRequest } from "~/utils/jac/httpRequest";
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useState } from "react";
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
-import { json, LoaderFunction } from '@remix-run/node';
-import { HttpRequest } from '~/utils/jac/httpRequest';
-import { useLoaderData } from '@remix-run/react';
 
-
-export const loader: LoaderFunction = async ({ params }) => {
-    let id = { id: params.StateID }
-
-    try {
-        const list_entity = await HttpRequest("list_entity", {})
-        // const intentList = await HttpRequest("list_state", {})
-        // const extList = await HttpRequest("list_entity_data_type", {})
-
-        return json({ list_entity: list_entity.report[0] });
-    } catch (error) {
-        console.log(error)
-        return json(error);
-    }
+export const loader: LoaderFunction = async () => {
+  try {
+    const response = await HttpRequest("list_all_intent", {})
+    return json({ data: response.payload });
+  } catch (error) {
+    console.log(error)
+    return json(error);
+  }
 };
 
 
-
 export default function Index() {
-    const { list_entity } = useLoaderData<LoaderType>()
+  const { data } = useLoaderData<LoaderType>();
+  const submit = useSubmit();
+  
+  const [open, setOpen] = useState(false);
+  const [deleteID, setDeleteID] = useState();
+  const [deleteValue, setDeleteValue] = useState();
 
-    const [inputText, setInputText] = useState("");
-    const [selectedText, setSelectedText] = useState("");
-    const [openDialog, setOpenDialog] = useState(false);
+  const handleClickOpen = (props: any) => {
+    setDeleteID(props.jid)
+    setDeleteValue(props.intent)
+    setOpen(true);
+  };
 
-    const currentSelection = (e: any) => {
-        const value = e.target.value.substring(e.target.selectionStart, e.target.selectionEnd)
-        setInputText(e.target.value)
-        if (value != "") {
-            console.log(
-                "current selection",
-                e.target.value.substring(e.target.selectionStart, e.target.selectionEnd)
-            );
-            setSelectedText(value)
-            handleClickOpen()
-        }
-    }
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-    const getSelectionHandler = () => {
-        const selection = window.getSelection();
-        console.log("Got selection", selection?.toString());
-    };
+  const handleDelete = async () => {
+    let id = { jid: deleteID }
 
-    const handleClickOpen = () => {
-        setOpenDialog(true);
-    };
+    await HttpRequest("delete_intent", id)
+    submit(null, { action: "/private/entity", method: 'get' })
 
-    const handleClose = () => {
-        setOpenDialog(false);
-    };
+    setOpen(false);
+  };
 
-    const handleSelectIntent = (event: any) => {
-        let formObject = TargetValue(event)
-        let formData = new FormData();
-        console.log(formObject)
-        // formData.append('selectIntent', formObject.value)
-        // submit(formData, { action: `/private/states/${StateID}`, method: 'post' })
-    }
+  return (
+    <Grid
+      container
+      direction="row"
+      justifyContent="space-between"
+      alignItems="center"
+      spacing={1}
+    >
+      <Grid item >
+        <Typography variant="h4" >
+          Entity
+        </Typography>
+      </Grid>
 
-    return (
-        <>
-            {/* <textarea onSelect={currentSelection} /> */}
-            <p></p>
-            <TextField
-                id="utterance"
-                label="utterance"
-                placeholder="Enter your sentence here"
-                onClick={currentSelection}
-                multiline
-                fullWidth
-                rows={4}
-            />
+      {/* <Grid item justifyContent='right' >
+        <Button variant="contained" color="primary" component={NavLink} to="/private/states/new">New State</Button>
+      </Grid> */}
+      <Grid item xs={12} marginTop={3}>
 
-            <div>
-                <button type="button" onClick={getSelectionHandler}>
-                    Get Selection
-                </button>
-            </div>
-            <Dialog open={openDialog} onClose={handleClose}
-                fullWidth
-                maxWidth={'sm'}>
-                <DialogTitle>Subscribe</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Select the entity for 
-                        <Chip label={selectedText}  />
 
-                    </DialogContentText>
-                </DialogContent>
+        <List
+          sx={{
+            width: '100%',
+            bgcolor: 'Background.default',
+            padding: 1,
+            // borderRadius: 2,
+            // boxShadow: 2,
+          }}
 
-                <DialogContent>
-                    <DialogContentText>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-multiple-name-label">Name</InputLabel>
-                            <Select
-                                onChange={handleSelectIntent}
-                                name="select"
-                                fullWidth
-                                // sx={{ fontSize: '2rem', fontWeight: 'bold', boxShadow: 'none', '.MuiOutlinedInput-notchedOutline': { border: 0 } }}
-                                input={<OutlinedInput label="Name" />}
+        >
+          {[...data].reverse().map((item: any) => (
+            <Grid
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={1}
+              key={item.jid}
+            >
+              <Grid item xs={7} sx={{ marginY: 1 }}>
+                <Typography variant="subtitle1">
+                  {item.intent}
+                </Typography>
+                {/* <Typography variant="body2">
+                  {item.answer}
+                </Typography> */}
+              </Grid>
 
-                            >
-                                {
-                                    list_entity.map((item: any) => (
-                                        <MenuItem key={item.jid} value={item.jid}> {item.entity_type}</MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </FormControl>
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions sx={{mb: 2, mx: 2}}>
-                    <Button variant='outlined' onClick={handleClose}>Cancel</Button>
-                    <Button variant='contained' onClick={handleClose}>Save</Button>
-                </DialogActions>
-            </Dialog>
+              <Grid item xs={5} >
+                <Stack
+                  direction="row"
+                  justifyContent="flex-end"
+                  alignItems="center"
+                  spacing={1}
+                >
+                  <Button variant="outlined" color="primary" component={NavLink} to={item.jid}>Create Context</Button>
+                  <Button variant="text" color="primary">Edit</Button>
+                  <IconButton color="primary" aria-label="delete" component="label" onClick={() => handleClickOpen(item)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Stack>
+              </Grid>
 
-        </>
-    )
+            </Grid>
+
+          ))}
+        </List>
+      </Grid>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Would you like to delete?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {deleteValue}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleDelete} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+      {/* {data && <pre>{JSON.stringify(data, null, 1)}</pre>} */}
+    </Grid>
+
+  );
 }
 
 
-function TargetValue(event: any) {
-    return event.target
-}
-
-
-type LoaderType = {
-    list_entity: EntityType[]
-}
+type LoaderType = { data: StateType[] };

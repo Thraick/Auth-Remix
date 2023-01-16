@@ -12,8 +12,8 @@ export const action: ActionFunction = async ({request}) => {
     let formData = Object.fromEntries(await request.formData());
     try {
         await StateSchema.validate(formData, { abortEarly: false })
-        let report = await HttpRequest("create_state", formData)
-        return redirect('/private/states/' + report.report[0].jid);
+        let report = await HttpRequest("create_intent", formData)
+        return redirect('/private/states/' + report.payload[0].jid);
     } catch (err) {
         const error = getValidationErrors(err)
         return { error };

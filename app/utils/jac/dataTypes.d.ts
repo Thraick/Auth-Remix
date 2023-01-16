@@ -4,20 +4,29 @@ interface FaqType {
     jid: string;
 }
 
-interface IntentType {
-    name_of_intent: string;
-    utterances: Array<string>;
+interface IntentUtteranceType {
     jid: string;
+    utterance: string;
+}
+interface IntentType {
+    jid: string;
+    intent: string;
 }
 
 interface StateType {
     intent: string;
-    responses: Array<string>;
+    response: string;
     jid: string;
 }
 
 
 interface EntityType {
-    entity_type: string;
     jid: string;
+    entity: string;
+}
+
+interface EntityContextType {
+    jid: string;
+    entity_value: string;
+    utterance: string;
 }

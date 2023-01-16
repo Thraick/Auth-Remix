@@ -6,7 +6,7 @@ export const FaqSchema = Yup.object().shape({
 });
 
 export const IntentSchema = Yup.object().shape({
-    name_of_intent: Yup.string().required(),
+    intent: Yup.string().required()
 });
 
 export const StateSchema = Yup.object().shape({

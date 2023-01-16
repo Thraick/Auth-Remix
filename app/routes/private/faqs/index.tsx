@@ -16,7 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 export const loader: LoaderFunction = async () => {
   try {
     const response = await HttpRequest("list_faq", {})
-    return json({ data: response.report[0] });
+    return json({ data: response.payload });
   } catch (error) {
     console.log(error)
     return json(error);
@@ -43,7 +43,7 @@ export default function Index() {
   };
 
   const handleDelete = async () => {
-    let id = { id: deleteID }
+    let id = { jid: deleteID }
 
     await HttpRequest("delete_faq", id)
     submit(null, { action: "/private/faqs", method: 'get' })

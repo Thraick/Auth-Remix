@@ -15,8 +15,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 export const loader: LoaderFunction = async () => {
   try {
-    const response = await HttpRequest("list_intent", {})
-    return json({ data: response.report[0] });
+    const response = await HttpRequest("list_all_intent", {})
+    return json({ data: response.payload });
   } catch (error) {
     console.log(error)
     return json(error);
@@ -34,7 +34,7 @@ export default function Index() {
 
   const handleClickOpen = (props: any) => {
     setDeleteID(props.jid)
-    setDeleteValue(props.question)
+    setDeleteValue(props.intent)
     setOpen(true);
   };
 
@@ -43,9 +43,9 @@ export default function Index() {
   };
 
   const handleDelete = async () => {
-    let id = { id: deleteID }
+    let id = { jid: deleteID }
 
-    await HttpRequest("delete_faq", id)
+    await HttpRequest("delete_intent", id)
     submit(null, { action: "/private/intents", method: 'get' })
 
     setOpen(false);
@@ -92,11 +92,8 @@ export default function Index() {
             >
               <Grid item xs={10} sx={{ marginY: 1 }}>
                 <Typography variant="subtitle1">
-                  {item.name_of_intent}
+                  {item.intent}
                 </Typography>
-                {/* <Typography variant="body2">
-                  {item.answer}
-                </Typography> */}
               </Grid>
 
               <Grid item xs={2} >
