@@ -55,8 +55,8 @@ export const action: ActionFunction = async ({
     console.log("values")
     console.log(values)
 
-    if ('create_state_entity' in values) {
-        await httpPost("create_state_entity", form)
+    if ('create_intent_entity' in values) {
+        await httpPost("create_intent_entity", form)
         return redirect('/private/entity/' + params.EntityID);
     }
     else if ('create_entity_context' in values) {
@@ -202,7 +202,7 @@ export default function EntityID() {
             "jid": EntityID,
             "entity": newEntity
         }
-        formData.append('create_state_entity', JSON.stringify(value))
+        formData.append('create_intent_entity', JSON.stringify(value))
         submit(formData, { action: `/private/entity/${EntityID}`, method: 'post' })
 
         setOpenNewEntityDialog(false);

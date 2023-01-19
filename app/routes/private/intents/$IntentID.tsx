@@ -50,12 +50,12 @@ export const action: ActionFunction = async ({ request, params }) => {
         await httpPost("update_intent", form)
         return redirect(`/private/intents/${params.IntentID}`);
     }
-    else if ('update_state_utterance' in values) {
-        await httpPost("update_state_utterance", form)
+    else if ('update_intent_utterance' in values) {
+        await httpPost("update_intent_utterance", form)
         return redirect(`/private/intents/${params.IntentID}`);
     }
-    else if ('create_state_utterance' in values) {
-        await httpPost("create_state_utterance", form)
+    else if ('create_intent_utterance' in values) {
+        await httpPost("create_intent_utterance", form)
         return redirect(`/private/intents/${params.IntentID}`);
     }
     else if ('delete_intent' in values) {
@@ -142,7 +142,7 @@ export default function IntentID() {
             jid: updateUtteranceIdChange
         }
 
-        formData.append('update_state_utterance', JSON.stringify(values))
+        formData.append('update_intent_utterance', JSON.stringify(values))
         submit(formData, { action: `/private/intents/${loader_intent[0].jid}`, method: 'post' })
         setOpenEditUtterance(openEditUtterance => !openEditUtterance)
     }
@@ -177,7 +177,7 @@ export default function IntentID() {
         setlist([...list, values])
 
         let formData = new FormData();
-        formData.append('create_state_utterance', JSON.stringify(values))
+        formData.append('create_intent_utterance', JSON.stringify(values))
         submit(formData, { action: `/private/intents/${loader_intent[0].jid}`, method: 'post' })
 
         setOpenNewUtterance(openNewUtterance => !openNewUtterance)

@@ -38,8 +38,8 @@ export const action: ActionFunction = async ({
         return redirect(`/private/states/${params.StateID}`);
 
     }
-    else if ('create_state_response' in values) {
-        await httpPost('create_state_response', form)
+    else if ('create_intent_response' in values) {
+        await httpPost('create_intent_response', form)
         return redirect(`/private/states/${params.StateID}`);
     }
     else if ('create_entity_response' in values) {
@@ -59,8 +59,8 @@ export const action: ActionFunction = async ({
         // return null
 
     }
-    else if ("update_state_response" in values) {
-        await httpPost('update_state_response', form)
+    else if ("update_intent_response" in values) {
+        await httpPost('update_intent_response', form)
         return redirect(`/private/states/${params.StateID}`);
     }
     else if ("delete_entity_response" in values) {
@@ -183,7 +183,7 @@ export default function StateIDPage() {
 
         if (StateID === formObject.intent) {
             // console.log("add_state_response")
-            formData.append('create_state_response', JSON.stringify(newFilterList))
+            formData.append('create_intent_response', JSON.stringify(newFilterList))
             submit(formData, { action: `/private/states/${StateID}`, method: 'post' })
 
         }
@@ -254,7 +254,7 @@ export default function StateIDPage() {
 
         if (currentState[0].intent === selectedItem[0].intent) {
             // console.log("update_state test")
-            formData.append('update_state_response', JSON.stringify(data))
+            formData.append('update_intent_response', JSON.stringify(data))
             // console.log(formData)
             submit(formData, { action: `/private/states/${StateID}`, method: 'post' })
         }
@@ -748,7 +748,7 @@ export default function StateIDPage() {
 
 //     //     if (currentState[0].intent === formObject.intent) {
 //     //         // console.log("add_state_response")
-//     //         formData.append('create_state_response', JSON.stringify(newFilterList))
+//     //         formData.append('create_intent_response', JSON.stringify(newFilterList))
 //     //         submit(formData, { action: `/private/states/${StateID}`, method: 'post' })
 
 //     //     }

@@ -34,7 +34,7 @@ export default function IntentID() {
         >
             <Grid item >
                 <Typography variant="h4" >
-                    New Intent
+                    New State
                 </Typography>
             </Grid>
 
