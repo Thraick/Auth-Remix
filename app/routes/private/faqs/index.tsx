@@ -68,7 +68,7 @@ export default function Index() {
       <Grid item justifyContent='right' >
         <Button variant="contained" color="primary" component={NavLink} to="/private/faqs/new">New Faq</Button>
       </Grid>
-      <Grid item xs={12} marginTop={3}>
+      <Grid item xs={12} marginTop={3} sx={{maxHeight: 600, overflow: 'auto'}}>
 
 
         <List

@@ -60,8 +60,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     }
     else if ('delete_intent' in values) {
         await httpPost("delete_intent", form)
-        return redirect('/private/entity');
-        // return redirect('/private/intents');
+        return redirect('/private/intents');
     }
     else if ('delete_intent_utterance' in values) {
         await httpPost("delete_intent_utterance", form)
@@ -210,8 +209,7 @@ export default function IntentID() {
             </Grid>
 
             <Grid item justifyContent='right' >
-                <IconButton color="primary" component={NavLink} to="/private/entity">
-                {/* <IconButton color="primary" component={NavLink} to="/private/intents"> */}
+                <IconButton color="primary" component={NavLink} to="/private/intents">
                     <ArrowBackIosNewIcon />
                 </IconButton>
             </Grid>

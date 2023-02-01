@@ -14,6 +14,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Chip, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+// import reactStringReplace from "react-string-replace";
 
 
 const Div = styled('div')(({ theme }) => ({
@@ -92,7 +93,7 @@ export default function EntityID() {
 
     const [inputText, setInputText] = useState("");
     const [selectedText, setSelectedText] = useState("");
-    const [selectedEntity, setSelectedEntity] = useState('');
+    // const [selectedEntity, setSelectedEntity] = useState('');
 
     const [openDialog, setOpenDialog] = useState(false);
     const [openNewEntityDialog, setOpenNewEntityDialog] = useState(false);
@@ -100,34 +101,11 @@ export default function EntityID() {
     const [openDelete, setOpenDelete] = useState(false);
     const [deleteValue, setDeleteValue] = useState('');
     const [deleteID, setDeleteID] = useState('');
-
-    // const [openDialogEdit, setOpenDialogEdit] = useState(false);
-    // const [editValue, setEditValue] = useState('');
-    // const [editValueId, setEditValueId] = useState('');
-
-    // const handleSubmitDialogEdit = () => {
-    //     let formData = new FormData();
-    //     let data = {
-    //         "jid": editValueId,
-    //         "utterance": inputText,
-    //         "entity_value": selectedText
-    //     }
-
-    //     formData.append('update_entity_context', JSON.stringify(data))
-    //     submit(formData, { action: `/private/entity/${EntityID}`, method: 'post' })
-    //     setOpenDialogEdit(false)
-    // }
-
-    // const handleDialogEditOpen = (jid: any, value: any) => {
-    //     setEditValue(value)
-    //     setEditValueId(jid)
-    //     setOpenDialogEdit(true);
-    // }
+    const [openEdit, setOpenEdit] = useState(false);
+    const [openEditId, setOpenEditId] = useState('');
+    const [openNewUtterance, setOpenNewUtterance] = useState(false);
 
 
-    // const handleCloseEdit = () => {
-    //     setOpenDialogEdit(false);
-    // };
 
     const handleCloseDelete = () => {
         setOpenDelete(false)
@@ -152,22 +130,34 @@ export default function EntityID() {
 
     const currentSelection = (e: any) => {
         const valueSelected = e.target.value.substring(e.target.selectionStart, e.target.selectionEnd)
-        setInputText(e.target.value)
+        // setInputText(e.target.value)
         const notValue = ["", " ", "  ", ". ", "? ", ".", "?"]
         if (!notValue.includes(valueSelected)) {
             console.log(
                 "current selection",
                 e.target.value.substring(e.target.selectionStart, e.target.selectionEnd)
             );
+
+            const startIndex = e.target.selectionStart;
+            const endIndex = e.target.selectionEnd;
+            const bracketedText = `[${e.target.value.slice(startIndex, endIndex)}]`;
+            const newText = e.target.value.substring(0, startIndex) + bracketedText + e.target.value.substring(endIndex);
+            setInputText(newText);
+
+
             setSelectedText(valueSelected)
             handleClickOpen()
+            // handleClose()
         }
-    }
 
-    // const getSelectionHandler = () => {
-    //     const selection = window.getSelection();
-    //     console.log("Got selection", selection?.toString());
-    // };
+        // console.log('selections')
+        // console.log(e.target.selectionStart)
+        // console.log(e.target.selectionEnd)
+
+
+        // console.log(newText)
+
+    }
 
     const handleClickOpen = () => {
         setOpenDialog(true);
@@ -181,15 +171,16 @@ export default function EntityID() {
         let formData = new FormData();
 
         const data = {
-            "jid": selectedEntity,
-            "utterance": inputText,
-            "entity_value": selectedText
+            "jid": EntityID,
+            "utterance": inputText
         }
 
         formData.append('create_entity_context', JSON.stringify(data))
         submit(formData, { action: `/private/entity/${EntityID}`, method: 'post' })
 
+        setOpenNewUtterance(false)
         setOpenDialog(false);
+        setInputText("")
     };
 
     const handleNewEntityClose = () => {
@@ -208,43 +199,54 @@ export default function EntityID() {
         setOpenNewEntityDialog(false);
     };
 
-    const handleSelectIntent = (event: any) => {
+    const handleSelectIntent = async (event: any) => {
         let formObject = TargetValue(event)
-        setSelectedEntity(formObject.value)
-        console.log("value")
-        console.log(formObject.value)
 
+        var value = "[" + selectedText + "](" + formObject.value + ")";
+        var repValue = "[" + selectedText + "]";
+        var newUtt = inputText.replace(repValue, value);
+
+        setInputText(newUtt)
+        handleClose()
     }
-
-    const handleCreateNewEntity = () => {
-        setOpenDialog(false);
-        setOpenNewEntityDialog(true)
-    }
-
-
-    // const customColor = [
-    //     { "first": red['A200'], "second": red['A100'] },
-    //     { "first": green['A200'], "second": green['A100'] }
-    // ]
-    // function get_random(list: any) {
-    //     return list[Math.floor((Math.random() * list.length))];
-    // }
-
 
     let customDict = [];
     customDict = utterance_list.map((item: any) => {
         const dic: { [key: string]: string } = {};
-        var before = item.utterance.split('[')[0];
-        dic['before'] = before;
-        var after = item.utterance.split(')')[1]
-        dic['after'] = after;
+        // var before = item.utterance.split('[')[0];
+        // dic['before'] = before;
+        // var after = item.utterance.split(')')[1]
+        // dic['after'] = after;
         dic['utterance'] = item.utterance;
-        dic['entity'] = item.entity;
+        dic['entity'] = item.entity_type;
         dic['value'] = item.entity_value;
         dic["jid"] = item.jid;
 
         return dic
     })
+
+
+    const handleOpenEdit = (jid: any, utterance: any) => {
+        setOpenEdit(openEdit => !openEdit)
+        setOpenEditId(jid)
+        setInputText(utterance)
+    }
+
+    const handleOpenEditSave = (jid: any, utterance: any) => {
+
+        let formData = new FormData();
+        const value = {
+            "jid": openEditId,
+            "utterance": inputText
+        }
+        formData.append('update_entity_context', JSON.stringify(value))
+        submit(formData, { action: `/private/entity/${EntityID}`, method: 'post' })
+
+        setOpenEdit(openEdit => !openEdit)
+        setOpenEditId('')
+        setInputText("")
+
+    }
 
 
 
@@ -258,33 +260,115 @@ export default function EntityID() {
             spacing={1}
         >
 
-
             <Grid item >
                 <Typography variant="h4" >
-                    Entity
+                    Entities
                 </Typography>
             </Grid>
 
             <Grid item justifyContent='right' >
                 <Button variant="contained" onClick={() => setOpenNewEntityDialog(true)} color="primary">New Entity</Button>
             </Grid>
+            {/* <Grid item xs={12} marginTop={3}>
+                {openEditId !== "" ?
+
+                    <TextField
+                        id="utterance"
+                        label="utterance"
+                        placeholder="Enter your sentence here"
+                        onClick={currentSelection}
+                        onChange={evt => setInputText(evt.target.value)}
+                        multiline
+                        fullWidth
+                        rows={4}
+                    />
+                    :
+                    <TextField
+                        id="utterance"
+                        label="utterance"
+                        placeholder="Enter your sentence here"
+                        onClick={currentSelection}
+                        value={inputText}
+                        onChange={evt => setInputText(evt.target.value)}
+                        multiline
+                        fullWidth
+                        rows={4}
+                    />
+                }
+            </Grid> */}
             <Grid item xs={12} marginTop={3}>
-                <TextField
-                    id="utterance"
-                    label="utterance"
-                    placeholder="Enter your sentence here"
-                    onClick={currentSelection}
-                    multiline
-                    fullWidth
-                    rows={4}
-                />
+                {/* <Stack direction="row" spacing={1}> */}
+
+                <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                >
+                    {entity_list.map((item:any)=>(
+                        <Chip key={item.jid} label={item.entity} color="primary" variant="outlined" />
+
+                    ))}
+
+                    {/* <Chip label="success" color="info" variant="outlined" />
+                    <Chip label="success" color="info" variant="outlined" /> */}
+                </Stack>
             </Grid>
             <Grid item xs={12} sx={{ mt: 3, mb: 3 }}>
-                <Typography variant="h4" >
-                    List of Entity Context
-                </Typography>
+
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={2}
+                >
+                    <Typography variant="h4" >
+                        Entity Contexts
+                    </Typography>
+                    {/* <Button variant="contained" color="primary" onClick={handleNewEntityContext}>Create utterance</Button> */}
+                    <Button variant="contained" color="primary" onClick={() => setOpenNewUtterance(true)}>Create utterance</Button>
+                </Stack>
             </Grid>
-            <Grid item xs={12}>
+
+
+
+            {openNewUtterance &&
+                < Grid item xs={12}>
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        spacing={2}
+                    >
+                        <TextField
+                            id="utterance"
+                            label="utterance"
+                            placeholder="Enter your sentence here"
+                            onClick={currentSelection}
+                            value={inputText}
+                            onChange={evt => setInputText(evt.target.value)}
+                            multiline
+                            fullWidth
+                            rows={2}
+                        />
+                        <Stack
+                            direction="row"
+                            justifyContent="flex-end"
+                            alignItems="center"
+                            spacing={1}
+                        >
+                            {/* <> */}
+                            <Button variant="text" color="primary" onClick={handleNewEntityContext} >Save</Button>
+                            <Button variant="text" color="primary" >Cancel</Button>
+                            {/* </> */}
+                        </Stack>
+                    </Stack>
+                </Grid>
+            }
+
+
+
+            <Grid item xs={12} sx={{ maxHeight: 400, overflow: 'auto' }}>
                 {
                     customDict &&
                     [...customDict].reverse().map((item: any, idx: any) => (
@@ -300,37 +384,47 @@ export default function EntityID() {
                                 alignItems="center"
                                 spacing={2}
                             >
+                                {openEdit && openEditId === item.jid
+                                    ?
+                                    // <Grid item xs={10} >
+                                    <TextField
+                                        label="Intent *"
+                                        variant="outlined"
+                                        name={'intent'}
+                                        value={inputText}
+                                        onClick={currentSelection}
+                                        onChange={evt => setInputText(evt.target.value)}
+                                        multiline
+                                        fullWidth
+                                        rows={3}
+                                    />
+                                    // </Grid>
+                                    :
+                                    <Div sx={{ bt: 2 }}>
+                                        {item.utterance}
+                                    </Div>
 
-                                {/* <Grid item xs={10} > */}
-                                <Div sx={{ bt: 2 }}>
-                                    {item.before}
-                                    &nbsp;
-
-                                    <Chip variant="outlined" color='info' label={item.value} />
-                                    {/* sx={{backgroundColor: blue[100]}} */}
-                                    {/* <Chip sx={{backgroundColor: item.color.first}} label={item.value} /> */}
-                                    &nbsp;
-                                    <Chip color='info' label={item.entity} />
-                                    &nbsp;
-
-                                    {/* <Chip sx={{backgroundColor: red[300]}} label={item.entity} /> */}
-                                    {item.after}
-
-                                </Div>
-                                {/* </Grid> */}
-                                {/* <Grid item xs={2} key={idx}> */}
-                                {/* <button type="submit">edit</button> */}
-                                {/* </Grid> */}
+                                }
                                 <Stack
                                     direction="row"
                                     justifyContent="flex-end"
                                     alignItems="center"
                                     spacing={1}
                                 >
-                                    {/* <Button variant="text" color="primary" onClick={() => handleDialogEditOpen(item.jid, item.utterance)}>Edit</Button> */}
-                                    <IconButton color="primary" aria-label="delete" component="label" onClick={() => handleDeleteOpen(item.jid, item.utterance)}>
-                                        <DeleteIcon />
-                                    </IconButton>
+                                    {openEdit && openEditId === item.jid
+                                        ?
+                                        <>
+                                            <Button variant="text" color="primary" onClick={() => handleOpenEditSave(item.jid, item.utterance)}>Save</Button>
+                                            <Button variant="text" color="primary" onClick={() => handleOpenEdit(item.jid, item.utterance)}>Cancel</Button>
+                                        </>
+                                        :
+                                        <>
+                                            <Button variant="text" color="primary" onClick={() => handleOpenEdit(item.jid, item.utterance)} >Edit</Button>
+                                            <IconButton color="primary" aria-label="delete" component="label" onClick={() => handleDeleteOpen(item.jid, item.utterance)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </>
+                                    }
                                 </Stack>
                             </Stack>
                         </div>
@@ -441,7 +535,7 @@ export default function EntityID() {
                                         <MenuItem value={"default"}> select entity</MenuItem>
                                         {
                                             entity_list.map((item: any) => (
-                                                <MenuItem key={item.jid} value={item.jid}> {item.entity}</MenuItem>
+                                                <MenuItem key={item.jid} value={item.entity}> {item.entity}</MenuItem>
                                             ))
                                         }
                                     </Select>
@@ -451,7 +545,7 @@ export default function EntityID() {
                         </DialogContent>
                     </>
                 }
-                <DialogActions sx={{ mb: 2, mx: 2 }}>
+                {/* <DialogActions sx={{ mb: 2, mx: 2 }}>
                     {entity_list.length === 0 ?
                         <Button variant='outlined' onClick={handleCreateNewEntity}>Create new</Button>
                         :
@@ -461,7 +555,7 @@ export default function EntityID() {
                         </>
 
                     }
-                </DialogActions>
+                </DialogActions> */}
             </Dialog>
 
             <Dialog
@@ -496,12 +590,13 @@ export default function EntityID() {
 
 
             {/* <Grid item xs={12} marginTop={3}>
+                {customDict2 && <pre>{JSON.stringify(customDict2, null, 1)}</pre>}
                 {entity_list && <pre>{JSON.stringify(entity_list, null, 1)}</pre>}
                 {utterance_list && <pre>{JSON.stringify(utterance_list, null, 1)}</pre>}
                 {customDict && <pre>{JSON.stringify(customDict, null, 1)}</pre>}
             </Grid> */}
 
-        </Grid>
+        </Grid >
     )
 }
 

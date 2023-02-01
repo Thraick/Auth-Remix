@@ -73,7 +73,8 @@ export const action: ActionFunction = async ({
     }
     else if ('delete_intent' in values) {
         await httpPost("delete_intent", form)
-        return redirect('/private/states');
+        return redirect('/private/entity');
+        // return redirect('/private/states');
     }
     else {
         console.log('else action ran')
@@ -343,7 +344,8 @@ export default function StateIDPage() {
             </Grid>
 
             <Grid item justifyContent='right' >
-                <IconButton color="primary" component={NavLink} to="/private/states">
+                <IconButton color="primary" component={NavLink} to="/private/entity">
+                {/* <IconButton color="primary" component={NavLink} to="/private/states"> */}
                     <ArrowBackIosNewIcon />
                 </IconButton>
             </Grid>
@@ -516,7 +518,7 @@ export default function StateIDPage() {
                 }
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{maxHeight: 400, overflow: 'auto'}}>
                 <Form method="post" onSubmit={handleUpdateResponse}>
                     {
                         response_list.map((item: any) => (

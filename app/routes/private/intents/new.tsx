@@ -15,7 +15,8 @@ export const action: ActionFunction = async ({request}) => {
         let report = await HttpRequest("create_intent", formData)
         console.log(report);
         // return null
-        return redirect('/private/intents/' + report.payload[0].jid);
+        return redirect('/private/entity');
+        // return redirect('/private/entity/' + report.payload[0].jid);
     } catch (err) {
         console.log(err)
         const error = getValidationErrors(err)

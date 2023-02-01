@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async () => {
 export default function Index() {
   const { data } = useLoaderData<LoaderType>();
   const submit = useSubmit();
-  
+
   const [open, setOpen] = useState(false);
   const [deleteID, setDeleteID] = useState();
   const [deleteValue, setDeleteValue] = useState();
@@ -61,10 +61,14 @@ export default function Index() {
     >
       <Grid item >
         <Typography variant="h4" >
-          Entity
+          Intents
         </Typography>
+
       </Grid>
 
+      <Grid item justifyContent='right' >
+        <Button variant="contained" color="primary" component={NavLink} to="/private/intents/new">New Intent</Button>
+      </Grid>
       {/* <Grid item justifyContent='right' >
         <Button variant="contained" color="primary" component={NavLink} to="/private/states/new">New State</Button>
       </Grid> */}
@@ -90,7 +94,7 @@ export default function Index() {
               spacing={1}
               key={item.jid}
             >
-              <Grid item xs={7} sx={{ marginY: 1 }}>
+              <Grid item xs={4} sx={{ marginY: 1 }}>
                 <Typography variant="subtitle1">
                   {item.intent}
                 </Typography>
@@ -99,15 +103,16 @@ export default function Index() {
                 </Typography> */}
               </Grid>
 
-              <Grid item xs={5} >
+              <Grid item xs={8} >
                 <Stack
                   direction="row"
                   justifyContent="flex-end"
                   alignItems="center"
                   spacing={1}
                 >
-                  <Button variant="outlined" color="primary" component={NavLink} to={item.jid}>Create Context</Button>
-                  <Button variant="text" color="primary">Edit</Button>
+                  <Button variant="outlined" color="primary" component={NavLink} to={item.jid}>Entity</Button>
+                  <Button variant="outlined" color="primary" component={NavLink} to={"/private/states/" + item.jid}>Response</Button>
+                  <Button variant="outlined" color="primary" component={NavLink} to={"/private/intents/" + item.jid}>Utterance</Button>
                   <IconButton color="primary" aria-label="delete" component="label" onClick={() => handleClickOpen(item)}>
                     <DeleteIcon />
                   </IconButton>
@@ -115,7 +120,6 @@ export default function Index() {
               </Grid>
 
             </Grid>
-
           ))}
         </List>
       </Grid>

@@ -63,9 +63,9 @@ export default function TopBar(props: any) {
                 spacing={1}
             >
                 <Button variant="text" color="primary" component={NavLink} to="/private/faqs">faqs</Button>
-                <Button variant="text" color="primary" component={RouterLink} to="/private/intents">intents</Button>
-                <Button variant="text" color="primary" component={RouterLink} to="/private/states">states</Button>
-                <Button variant="text" color="primary" component={RouterLink} to="/private/entity">entity</Button>
+                {/* <Button variant="text" color="primary" component={RouterLink} to="/private/intents">intents</Button>
+                <Button variant="text" color="primary" component={RouterLink} to="/private/states">states</Button> */}
+                <Button variant="text" color="primary" component={RouterLink} to="/private/entity">States</Button>
             </Stack>
 
 

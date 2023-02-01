@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async () => {
 export default function Index() {
   const { data } = useLoaderData<LoaderType>();
   const submit = useSubmit();
-  
+
   const [open, setOpen] = useState(false);
   const [deleteID, setDeleteID] = useState();
   const [deleteValue, setDeleteValue] = useState();
@@ -68,6 +68,7 @@ export default function Index() {
       <Grid item justifyContent='right' >
         <Button variant="contained" color="primary" component={NavLink} to="/private/intents/new">New Intent</Button>
       </Grid>
+      
       <Grid item xs={12} marginTop={3}>
 
 
