@@ -53,3 +53,5 @@ More use cases can be found on [Remix Auth Supabase - Use cases](https://github.
 - [Remix Auth](https://github.com/sergiodxa/remix-auth)
 - [Remix Auth Supabase](https://github.com/mitchelvanbever/remix-auth-supabase)
 - [supabase-js](https://github.com/supabase/supabase-js)
+
+

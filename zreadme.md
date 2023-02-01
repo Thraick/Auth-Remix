@@ -9,3 +9,14 @@ npm install zod-form-data
 npm install zod 
 npm i yup
 npm i react-string-replace
+
+
+remove packages-lock.json
+ npm install
+ npm run dev
+
+ update 
+
+ app/utils/jac/httpRequest.tsx
+
+ 
