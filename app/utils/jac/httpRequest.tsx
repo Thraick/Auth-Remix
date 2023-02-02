@@ -1,5 +1,5 @@
 export const server = {
-  token: '7c14670991e328a699f996ceb73a427a16d7752b2ca0dc1e5e05759d9bff14ff',
+  token: '5c031ab4571107fef5f67f297c3eba2124399a2d02353a3a997f67169c95df56',
   url: 'http://0.0.0.0:8099/js/walker_run',
   snt: "urn:uuid:247433f6-9b06-46b4-bfec-de3feaf9b990",
 }
